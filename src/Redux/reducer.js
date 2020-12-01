@@ -1,4 +1,4 @@
-import { GET_FOLLOWERS_FAILURE, GET_FOLLOWERS_SUCCESS, GET_FOLLOWERS_REQUEST, GET_REPOSITORIES_FAILURE, GET_REPOSITORIES_SUCCESS, GET_REPOSITORIES_REQUEST } from "./actionTypes"
+import { GET_FOLLOWERS_FAILURE, GET_FOLLOWERS_SUCCESS, GET_FOLLOWERS_REQUEST, GET_REPOSITORIES_FAILURE, GET_REPOSITORIES_SUCCESS, GET_REPOSITORIES_REQUEST, GET_REPO_REQUEST, GET_REPO_SUCCESS, GET_REPO_FAILURE } from "./actionTypes"
 
 export const initState = {
     repositories: [],
@@ -6,7 +6,8 @@ export const initState = {
     isLoading: false,
     err: false,
     followers: [],
-    isLoadingFollowers: false
+    isLoadingFollowers: false,
+    repo: {}
 }
 
 const reducer = (state = initState, action) => {
@@ -46,6 +47,25 @@ const reducer = (state = initState, action) => {
             return {
                 ...state,
                 isLoadingFollowers: false,
+                err: true
+            }
+        case GET_REPO_REQUEST:
+            return {
+                ...state,
+                isLoading: true,
+                err: false,
+                repo: {}
+            }
+        case GET_REPO_SUCCESS:
+            return {
+                ...state,
+                repo: action.payload,
+                isLoading: false
+            }
+        case GET_REPO_FAILURE:
+            return {
+                ...state,
+                isLoading: false,
                 err: true
             }
         default:

@@ -1,7 +1,6 @@
 import React from 'react'
 
 export const Followers = ({ data, handleChangeUser }) => {
-    console.log(data)
     return (
         <div className="followers">
             <div>

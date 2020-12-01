@@ -1,0 +1,27 @@
+.repo{
+    display: flex;
+    width: 50%;
+    margin: 0px auto;
+    flex-direction: row;
+    margin-top: 5%;
+}
+
+.repo >div:nth-child(1){
+    width: 30%;
+}
+
+.repo>div:nth-child(2){
+    width: 70%;
+}
+
+.back{
+    float: right;
+}
+
+.back > button{
+    background-color: grey;
+    border: 1px solid grey;
+    padding: 5px 20px;
+    color: white;
+    border-radius: 5px;
+}

@@ -18,7 +18,7 @@ export const SearchPage = () => {
             <div>
                 <img src={logo} alt="Logo" width="500px" />
             </div>
-            <div>
+            <div className="inputs">
                 <input value={search} onChange={e => setSearch(e.target.value)} type="text" placeholder="Search by your name" />
                 <button onClick={handleSearchRepositories}>Search</button>
             </div>

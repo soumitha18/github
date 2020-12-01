@@ -37,7 +37,7 @@ export const Repositories = () => {
     }
 
     const handleChangeRepoPage = (item) => {
-        history.push(`/repo/${user.login}/${item.name}`)
+        history.push(`/repo/${item.full_name}`)
     }
 
     if (isLoading) return <Loading />

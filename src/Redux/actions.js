@@ -1,5 +1,6 @@
-import { GET_FOLLOWERS_REQUEST, GET_FOLLOWERS_SUCCESS, GET_FOLLOWERS_FAILURE, GET_REPOSITORIES_REQUEST, GET_REPOSITORIES_SUCCESS, GET_REPOSITORIES_FAILURE } from "./actionTypes"
+import { GET_FOLLOWERS_REQUEST, GET_FOLLOWERS_SUCCESS, GET_FOLLOWERS_FAILURE, GET_REPOSITORIES_REQUEST, GET_REPOSITORIES_SUCCESS, GET_REPOSITORIES_FAILURE, GET_REPO_REQUEST, GET_REPO_SUCCESS, GET_REPO_FAILURE } from "./actionTypes"
 import axios from "axios"
+import { loadData } from "./localStorage"
 
 //actions to get the repositories of particular user name
 export const getRepositoriesRequest = (payload) => ({
@@ -38,8 +39,39 @@ export const getFollowersFailure = () => ({
 })
 
 export const getFollowers = (user) => (dispatch) => {
-    dispatch(getFollowersRequest())
-    axios.get(`https://api.github.com/users/${user}/followers`)
-        .then(res => dispatch(getFollowersSuccess(res.data)))
-        .catch(() => dispatch(getFollowersFailure()))
+    let userData = loadData("users") || []
+    let result = userData.find(item => item.owner["name"] === user)
+    if (result) {
+        console.log(result)
+    }
+    else {
+        dispatch(getFollowersRequest())
+        axios.get(`https://api.github.com/users/${user}/followers`)
+            .then(res => {
+                dispatch(getFollowersSuccess(res.data))
+            })
+            .catch(() => dispatch(getFollowersFailure()))
+    }
+}
+
+//actions to get Individual Repository
+
+export const getRepoRequest = () => ({
+    type: GET_REPO_REQUEST
+})
+
+export const getRepoSuccess = (payload) => ({
+    type: GET_REPO_SUCCESS,
+    payload
+})
+
+export const getRepoFailure = () => ({
+    type: GET_REPO_FAILURE
+})
+
+export const getRepo = (name, repo) => (dispatch) => {
+    dispatch(getRepoRequest())
+    axios.get(`https://api.github.com/repos/${name}/${repo}`)
+        .then(res => dispatch(getRepoSuccess(res.data)))
+        .catch(() => dispatch(getRepoFailure()))
 }
