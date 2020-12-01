@@ -1,5 +1,6 @@
 import { GET_FOLLOWERS_REQUEST, GET_FOLLOWERS_SUCCESS, GET_FOLLOWERS_FAILURE, GET_REPOSITORIES_REQUEST, GET_REPOSITORIES_SUCCESS, GET_REPOSITORIES_FAILURE, GET_REPO_REQUEST, GET_REPO_SUCCESS, GET_REPO_FAILURE } from "./actionTypes"
 import axios from "axios"
+import { loadData, saveData } from "./localStorage"
 
 //actions to get the repositories of particular user name
 export const getRepositoriesRequest = (payload) => ({
@@ -17,13 +18,22 @@ export const getRepositoriesFailure = () => ({
 })
 
 export const getRepositories = (username) => (dispatch) => {
-    dispatch(getRepositoriesRequest(username))
-    axios.get(`https://api.github.com/users/${username}/repos`)
-        .then(res => {
-            dispatch(getRepositoriesSuccess(res.data))
-        })
-        .catch(() => dispatch(getRepositoriesFailure()))
 
+    let userData = loadData("users") || {}
+    let result = userData[username]
+    if (result) {
+        dispatch(getRepositoriesSuccess(result))
+    }
+    else {
+        dispatch(getRepositoriesRequest(username))
+        axios.get(`https://api.github.com/users/${username}/repos`)
+            .then(res => {
+                userData[username] = res.data
+                saveData("users", userData)
+                dispatch(getRepositoriesSuccess(res.data))
+            })
+            .catch(() => dispatch(getRepositoriesFailure()))
+    }
 }
 
 //actions to get the followers list of the particular user
@@ -41,13 +51,21 @@ export const getFollowersFailure = () => ({
 })
 
 export const getFollowers = (user) => (dispatch) => {
-    dispatch(getFollowersRequest())
-    axios.get(`https://api.github.com/users/${user}/followers`)
-        .then(res => {
-            dispatch(getFollowersSuccess(res.data))
-        })
-        .catch(() => dispatch(getFollowersFailure()))
-
+    let userFollowers = loadData("followers") || {}
+    let result = userFollowers[user]
+    if (result) {
+        dispatch(getFollowersSuccess(result))
+    }
+    else {
+        dispatch(getFollowersRequest())
+        axios.get(`https://api.github.com/users/${user}/followers`)
+            .then(res => {
+                userFollowers[user] = res.data
+                saveData("followers", userFollowers)
+                dispatch(getFollowersSuccess(res.data))
+            })
+            .catch(() => dispatch(getFollowersFailure()))
+    }
 }
 
 //actions to get Individual Repository
@@ -66,8 +84,17 @@ export const getRepoFailure = () => ({
 })
 
 export const getRepo = (name, repo) => (dispatch) => {
+    let Repositories = loadData("Repositories") || {}
+    let result = Repositories[`${name}/${repo}`]
+    if (result) {
+        dispatch(getRepoSuccess(result))
+    }
     dispatch(getRepoRequest())
     axios.get(`https://api.github.com/repos/${name}/${repo}`)
-        .then(res => dispatch(getRepoSuccess(res.data)))
+        .then(res => {
+            Repositories[`${name}/${repo}`] = res.data
+            saveData("Repositories", Repositories)
+            dispatch(getRepoSuccess(res.data))
+        })
         .catch(() => dispatch(getRepoFailure()))
 }

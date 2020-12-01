@@ -1,3 +1,4 @@
+// to get the data from LocalStorage 
 export const loadData = key => {
     try {
         let data = localStorage.getItem(key)
@@ -9,6 +10,7 @@ export const loadData = key => {
     }
 }
 
+// to push the data to localStorage
 export const saveData = (key, data) => {
     localStorage.setItem(key, JSON.stringify(data))
 }
