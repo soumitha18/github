@@ -18,14 +18,13 @@ export const getRepositoriesFailure = () => ({
 })
 
 export const getRepositories = (username) => (dispatch) => {
-
+    dispatch(getRepositoriesRequest(username))
     let userData = loadData("users") || {}
     let result = userData[username]
     if (result) {
         dispatch(getRepositoriesSuccess(result))
     }
     else {
-        dispatch(getRepositoriesRequest(username))
         axios.get(`https://api.github.com/users/${username}/repos`)
             .then(res => {
                 userData[username] = res.data
@@ -51,13 +50,13 @@ export const getFollowersFailure = () => ({
 })
 
 export const getFollowers = (user) => (dispatch) => {
+    dispatch(getFollowersRequest())
     let userFollowers = loadData("followers") || {}
     let result = userFollowers[user]
     if (result) {
         dispatch(getFollowersSuccess(result))
     }
     else {
-        dispatch(getFollowersRequest())
         axios.get(`https://api.github.com/users/${user}/followers`)
             .then(res => {
                 userFollowers[user] = res.data
@@ -84,17 +83,19 @@ export const getRepoFailure = () => ({
 })
 
 export const getRepo = (name, repo) => (dispatch) => {
+    dispatch(getRepoRequest())
     let Repositories = loadData("Repositories") || {}
     let result = Repositories[`${name}/${repo}`]
     if (result) {
         dispatch(getRepoSuccess(result))
     }
-    dispatch(getRepoRequest())
-    axios.get(`https://api.github.com/repos/${name}/${repo}`)
-        .then(res => {
-            Repositories[`${name}/${repo}`] = res.data
-            saveData("Repositories", Repositories)
-            dispatch(getRepoSuccess(res.data))
-        })
-        .catch(() => dispatch(getRepoFailure()))
+    else {
+        axios.get(`https://api.github.com/repos/${name}/${repo}`)
+            .then(res => {
+                Repositories[`${name}/${repo}`] = res.data
+                saveData("Repositories", Repositories)
+                dispatch(getRepoSuccess(res.data))
+            })
+            .catch(() => dispatch(getRepoFailure()))
+    }
 }
