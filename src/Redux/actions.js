@@ -33,14 +33,13 @@ export const getFollowersSuccess = (payload) => ({
     payload
 })
 
-export const getFollowersFailure = (payload) => ({
-    type: GET_FOLLOWERS_FAILURE,
-    payload
+export const getFollowersFailure = () => ({
+    type: GET_FOLLOWERS_FAILURE
 })
 
-export const getFollowers = (url) => (dispatch) => {
-    dispatch(getRepositoriesRequest())
-    axios.get(url)
-        .then(res => console.log(res))
-        .catch(err => console.log(err))
+export const getFollowers = (user) => (dispatch) => {
+    dispatch(getFollowersRequest())
+    axios.get(`https://api.github.com/users/${user}/followers`)
+        .then(res => dispatch(getFollowersSuccess(res.data)))
+        .catch(() => dispatch(getFollowersFailure()))
 }

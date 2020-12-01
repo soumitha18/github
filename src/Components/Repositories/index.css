@@ -44,7 +44,7 @@
     height: 100px
 }
 
-.repositories > div:hover{
+.repositories > div:hover, .followers:hover{
     box-shadow: 0px 0px 3px 3px rgb(151, 150, 150);
 }
 
@@ -65,8 +65,37 @@
 .repositories >div>div:nth-child(2)>h5:hover{
     color: blue;
     text-decoration: underline;
+    cursor: pointer;
 }
 
 .repositories >div>div:nth-child(2)>small{
     color: rgb(66, 65, 65);
+}
+
+.followers{
+    display: flex;
+    flex-direction: row;
+    border: 1px solid rgb(185, 183, 183);
+    padding: 1%;
+    margin: 15px 100px;
+}
+
+.followers > div:nth-child(1){
+    width: 20%;
+    text-align: center;
+}
+
+.followers > div:nth-child(1) > img{
+    border-radius: 80%;
+}
+
+.followers > div:nth-child(2){
+    width: 70%;
+    text-align: left;
+}
+
+.followers > div:nth-child(2) > h4:hover{
+    color: blue;
+    cursor: pointer;
+    text-decoration: underline;
 }

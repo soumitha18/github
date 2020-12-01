@@ -1,9 +1,11 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory, useParams } from 'react-router'
-import { getRepositories } from "../../Redux/actions"
+import { getFollowers, getRepositories } from "../../Redux/actions"
 import { Loading } from '../ExtraComponents/Loading'
 import { PageNotFound } from '../ExtraComponents/PageNotFound'
+import { Followers } from './Components/Followers'
+import { Repos } from './Components/Repos'
 import "./index.css"
 
 export const Repositories = () => {
@@ -11,8 +13,9 @@ export const Repositories = () => {
     const params = useParams()
     const dispatch = useDispatch()
     const history = useHistory()
+    const [followersState, setFollowersState] = useState(false)
 
-    const { user, repositories, isLoading, err } = useSelector(state => state.response)
+    const { user, repositories, isLoading, err, followers, isLoadingFollowers } = useSelector(state => state.response)
 
     useEffect(() => {
         dispatch(getRepositories(params.name))
@@ -22,8 +25,15 @@ export const Repositories = () => {
         history.push("/")
     }
 
+    const handleChangeUser = (user) => {
+        history.push(`/user/${user}`)
+        setFollowersState(false)
+    }
+
     const handleGetFollowers = () => {
-        history.push(`/followers/${user.login}`)
+        if (!followersState)
+            dispatch(getFollowers(params.name))
+        setFollowersState(!followersState)
     }
 
     const handleChangeRepoPage = (item) => {
@@ -43,25 +53,35 @@ export const Repositories = () => {
                 <div>
                     <img src={user.avatar_url} alt="userImage" width="200px" />
                     <h2>{user.login}</h2>
-                    <button onClick={handleGetFollowers}>Followers</button>
+                    <button onClick={handleGetFollowers}>{followersState ? "Repositories" : "Followers"}</button>
                 </div>
                 <div>
-                    <h2>Repositories ({repositories.length})</h2>
-                    <div className="repositories">
-                        {
-                            repositories && repositories.map((item, index) =>
-                                <div key={index}>
-                                    <div>
-                                        <img src="https://www.flaticon.com/svg/static/icons/svg/1051/1051377.svg" alt="repoImage" width="75spx" />
-                                    </div>
-                                    <div>
-                                        <h5 onClick={() => handleChangeRepoPage(item)}>{item.name}</h5>
-                                        <small>{item.description}</small>
-                                    </div>
+                    {
+                        followersState ?
+                            <>
+                                {
+                                    isLoadingFollowers ? <Loading />
+                                        :
+                                        <>
+                                            <h2>Followers ({followers.length})</h2>
+                                            <div>
+                                                {
+                                                    followers && followers.map((item, index) => <Followers key={index} data={item} handleChangeUser={handleChangeUser} />)
+                                                }
+                                            </div>
+                                        </>
+                                }
+                            </>
+                            :
+                            <>
+                                <h2>Repositories ({repositories.length})</h2>
+                                <div className="repositories">
+                                    {
+                                        repositories && repositories.map((item, index) => <Repos key={index} item={item} handleChangeRepoPage={handleChangeRepoPage} />)
+                                    }
                                 </div>
-                            )
-                        }
-                    </div>
+                            </>
+                    }
                 </div>
             </div>
         </div>

@@ -5,7 +5,8 @@ export const initState = {
     user: {},
     isLoading: false,
     err: false,
-    followers: []
+    followers: [],
+    isLoadingFollowers: false
 }
 
 const reducer = (state = initState, action) => {
@@ -32,19 +33,19 @@ const reducer = (state = initState, action) => {
         case GET_FOLLOWERS_REQUEST:
             return {
                 ...state,
-                isLoading: true,
+                isLoadingFollowers: true,
                 err: false
             }
         case GET_FOLLOWERS_SUCCESS:
             return {
                 ...state,
-                isLoading: false,
+                isLoadingFollowers: false,
                 followers: action.payload
             }
         case GET_FOLLOWERS_FAILURE:
             return {
                 ...state,
-                isLoading: false,
+                isLoadingFollowers: false,
                 err: true
             }
         default:
