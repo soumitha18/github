@@ -1,0 +1,72 @@
+.back{
+    float: right;
+}
+
+.back > button{
+    background-color: grey;
+    border: 1px solid grey;
+    padding: 5px 20px;
+    color: white;
+    border-radius: 5px;
+}
+
+.user{
+    display: flex;
+    flex-direction: row;
+}
+
+.user > div:nth-child(1){
+    width: 20%;
+    text-align: center;
+}
+
+.user > div:nth-child(2){
+    width: 80%;
+}
+
+.user > div:nth-child(2) > h2{
+    text-align: center;
+}
+
+.user > div > img{
+    border-radius: 50%;
+}
+
+.repositories > div{
+    float: left;
+    display: flex;
+    flex-direction: row;
+    width: 40%;
+    margin: 1.5%;
+    border: 1px solid rgb(185, 183, 183);
+    background-color: rgb(255, 255, 255);
+    padding: 1%;
+    height: 100px
+}
+
+.repositories > div:hover{
+    box-shadow: 0px 0px 3px 3px rgb(151, 150, 150);
+}
+
+.repositories > div> div:nth-child(1){
+    width: 30%;
+    text-align: center;
+}
+
+.repositories > div> div:nth-child(2){
+    width: 70%;
+}
+
+.repositories >div>div:nth-child(2)>h5{
+    margin: 5px 0px ;
+    padding: 0;
+}
+
+.repositories >div>div:nth-child(2)>h5:hover{
+    color: blue;
+    text-decoration: underline;
+}
+
+.repositories >div>div:nth-child(2)>small{
+    color: rgb(66, 65, 65);
+}
