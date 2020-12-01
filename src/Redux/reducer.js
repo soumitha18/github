@@ -4,7 +4,7 @@ export const initState = {
     repositories: [],
     user: {},
     isLoading: false,
-    err: "",
+    err: false,
     followers: []
 }
 
@@ -14,7 +14,7 @@ const reducer = (state = initState, action) => {
             return {
                 ...state,
                 isLoading: true,
-                err: ""
+                err: false
             }
         case GET_REPOSITORIES_SUCCESS:
             return {
@@ -27,13 +27,13 @@ const reducer = (state = initState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                err: action.payload
+                err: true
             }
         case GET_FOLLOWERS_REQUEST:
             return {
                 ...state,
                 isLoading: true,
-                err: ""
+                err: false
             }
         case GET_FOLLOWERS_SUCCESS:
             return {
@@ -45,7 +45,7 @@ const reducer = (state = initState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                err: action.payload
+                err: true
             }
         default:
             return state

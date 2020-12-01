@@ -12,16 +12,15 @@ export const getRepositoriesSuccess = (payload) => ({
     payload
 })
 
-export const getRepositoriesFailure = (payload) => ({
-    type: GET_REPOSITORIES_FAILURE,
-    payload
+export const getRepositoriesFailure = () => ({
+    type: GET_REPOSITORIES_FAILURE
 })
 
 export const getRepositories = (username) => (dispatch) => {
     dispatch(getRepositoriesRequest(username))
     axios.get(`https://api.github.com/users/${username}/repos`)
-        .then(res => console.log(res))
-        .catch(err => console.log(err))
+        .then(res => dispatch(getRepositoriesSuccess(res.data)))
+        .catch(() => dispatch(getRepositoriesFailure()))
 }
 
 //actions to get the followers list of the particular user
